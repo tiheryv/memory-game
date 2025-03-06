@@ -19,12 +19,10 @@ const ScoreBar: React.FC<ScoreBarProps> = ({ username, score }) => {
           {username}
         </p>
       </div>
-      <img
-        src={brain}
-        alt="Memory game logo"
-        width={32}
-        className="scorebar__logo"
-      />
+
+      <div className="scorebar__image flex w-12">
+        <img src={brain} alt="memory-game-logo" className="scorebar__logo" />
+      </div>
       <div className="scorebar__score">
         <p>Score:</p>
         <p className="text-xs text-green-300">Wins: {score.win}</p>

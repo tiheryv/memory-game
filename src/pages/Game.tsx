@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import ScoreBar from "../components/ScoreBar";
 import { fetchAnimalImages } from "../api/getImages";
 import Modal from "../components/Modal";
@@ -21,21 +21,28 @@ const Game = ({ username }: { username: string }) => {
     return [...cards].sort(() => Math.random() - 0.5);
   };
 
+  const loadCards = async () => {
+    const images = await fetchAnimalImages();
+
+    if (images.length === 0) return;
+
+    const selectedImages = images.slice(0, 8);
+
+    const pairedCards = selectedImages.flatMap((img) => [
+      { ...img, id: img.id + "-1", matched: false },
+      { ...img, id: img.id + "-2", matched: false },
+    ]);
+
+    // Pre-cargar las imágenes
+    pairedCards.forEach((card) => {
+      const img = new Image();
+      img.src = card.url;
+    });
+
+    setCards(shuffleCards(pairedCards));
+  };
+
   useEffect(() => {
-    const loadCards = async () => {
-      const images = await fetchAnimalImages();
-
-      if (images.length === 0) return;
-
-      const selectedImages = images.slice(0, 8);
-
-      const pairedCards = selectedImages.flatMap((img) => [
-        { ...img, id: img.id + "-1", matched: false },
-        { ...img, id: img.id + "-2", matched: false },
-      ]);
-
-      setCards(shuffleCards(pairedCards));
-    };
     loadCards();
   }, []);
 
@@ -48,7 +55,7 @@ const Game = ({ username }: { username: string }) => {
 
     if (newFlipped.length === 2) {
       setIsLocked(true);
-      setTimeout(() => checkForMatch(newFlipped), 500);
+      setTimeout(() => checkForMatch(newFlipped), 1000);
     }
   };
 
@@ -83,21 +90,10 @@ const Game = ({ username }: { username: string }) => {
     setScore({ fail: 0, win: 0 });
     setIsGameFinished(false);
     setCards([]);
-
-    const loadNewGame = async () => {
-      const images = await fetchAnimalImages();
-      if (images.length === 0) return;
-
-      const pairedCards = images.flatMap((img) => [
-        { ...img, id: img.id + "-1", matched: false },
-        { ...img, id: img.id + "-2", matched: false },
-      ]);
-
-      setCards(shuffleCards(pairedCards));
-    };
-
-    loadNewGame();
+    loadCards();
   };
+
+  const memoizedCards = useMemo(() => cards, [cards]);
 
   return (
     <>
@@ -117,9 +113,6 @@ const Game = ({ username }: { username: string }) => {
               </li>
               <li className="congratulation__list-item">
                 Each card has one identical pair on the board.
-              </li>
-              <li className="congratulation__list-item">
-                On each turn, the player must flip two cards.
               </li>
               <li className="congratulation__list-item">
                 On each turn, the player must flip two cards.
@@ -149,9 +142,9 @@ const Game = ({ username }: { username: string }) => {
           </h2>
         </Modal>
       ) : (
-        <div className="game__container m-auto">
+        <div className="game__container m-auto max-w-screen-lg">
           <div className="game__grid grid grid-cols-4 gap-2 md:gap-4">
-            {cards.map((card, index) => (
+            {memoizedCards.map((card, index) => (
               <div
                 key={card.id}
                 className={`game__card w-full h-28 sm:w-36 sm:h-40 md:w-40 md:h-48 m-auto flex items-center justify-center border border-gray-400 rounded-lg cursor-pointer ${
