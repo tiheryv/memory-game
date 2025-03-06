@@ -33,7 +33,6 @@ const Game = ({ username }: { username: string }) => {
       { ...img, id: img.id + "-2", matched: false },
     ]);
 
-    // Pre-cargar las imágenes
     pairedCards.forEach((card) => {
       const img = new Image();
       img.src = card.url;
