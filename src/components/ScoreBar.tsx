@@ -15,7 +15,7 @@ const ScoreBar: React.FC<ScoreBarProps> = ({ username, score }) => {
     <div className="scorebar__container font-pixel text-sm bg-secondary px-10 my-3 py-6 border-y border-light text-light flex justify-between">
       <div className="scorebar__player self-center">
         <p>Player:</p>
-        <p className="text-xs tracking-widest underline bg-neonGreen text-black p-1 rounded-lg">
+        <p className="text-xs tracking-widest underline bg-neonGreen text-black p-2 mt-1 rounded-lg">
           {username}
         </p>
       </div>
