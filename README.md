@@ -9,6 +9,3 @@ Steps followed for Deployment
 
 Vercel will automatically detect the framework used (React, Next.js, Vue, etc.) and
 do automatic Deployments.
-
-
-Deployment link on the top right
