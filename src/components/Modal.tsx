@@ -16,11 +16,11 @@ const Modal: React.FC<ModalProps> = ({
       className="modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
       aria-modal="true"
     >
-      <div className="modal__content font-crt border bg-primary flex flex-col items-center justify-center p-6 rounded-lg shadow-lg w-7/12 animate-fadeIn">
+      <div className="modal__content font-crt border bg-primary flex flex-col items-center justify-center p-6 rounded-lg shadow-lg w-full h-full md:h-auto md:w-7/12 animate-fadeIn">
         {children}
         <button
           onClick={() => setShowModal(false)}
-          className="modal__button mt-6 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+          className="modal__button w-full mt-32 md:w-auto md:mt-6 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
         >
           {buttonText}
         </button>
